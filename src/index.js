@@ -1,4 +1,4 @@
-import { Component as ReactComponent, createElement } from 'react';
+import { Component, createElement } from 'react';
 import { combine, isStream } from 'flyd';
 
 /**
@@ -17,7 +17,7 @@ import { combine, isStream } from 'flyd';
  * give the render function full access to the raw stream (rather
  * than just the data).  This makes it easier to 'react' :)
  */
-export class StreamingComponent extends ReactComponent {
+export class StreamingComponent extends Component {
   constructor(props) {
     super(props);
 
