@@ -25,5 +25,73 @@ If you dig in, you will see that this component uses `forceUpdate` **gasp**.  It
 
 #### Examples
 
-... forthcoming. 😬
+Basic Usage:
+```jsx
+// import
+import Flyd from 'react-flyd-component';
 
+// write some helpers
+function bindValue(cb) {
+  return e => cb(e.target.value);
+}
+
+// wrap an ordinary component
+const EmailField = Flyd((props) => {
+  // this is kind of a bad example because it's not really
+  // possible to tell which prop is a stream just by reading
+  // this render function, but that's always the challenge,
+  // isn't it? 😬
+
+  // I'll leave it to the reader to determine an appropriate
+  // naming convention for the streams passed via props.
+  return (
+    {/* use streams for content */}
+    <label htmlFor="props.name">{props.label()}</label>
+    <input
+      type="email"
+      {/* mix streams and normal values freely */}
+      name={props.name}
+      {/* get your stream's value by calling it */}
+      value={props.value()}
+      {/* or access it by reference to pass it elsewhere */}
+      onChange={bindValue(props.value)}
+    />
+});
+// render/export or something down here
+```
+
+Advanced Usage:
+```jsx
+// import
+import { stream } from 'flyd';
+import { StreamingComponent } from 'react-flyd-component';
+
+// create a massively complex multi-stream component
+// (if that's what you're into)
+class InsaneComponent extends StreamingComponent {
+  constructor(props) {
+    super(props);
+
+    // you might not *want* to store streams on state,
+    // but there's nothing stopping you from doing it!
+    this.state = {
+      message: stream(),
+      input: stream(),
+      something: stream(),
+    }
+
+    // state is not automatically evaluated.
+    // add an array of streams to watch manually
+    this.setStreams([
+      this.state.message,
+      this.state.input,
+      this.state.something,
+    ]);
+
+    // that's it.  this component will now update
+    // automatically with every stream change.
+  }
+  // needs a render function obvs
+}
+// render/export
+```
