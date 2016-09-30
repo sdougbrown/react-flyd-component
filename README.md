@@ -1,5 +1,8 @@
 # React Flyd Component
 
+[![GitHub issues](https://img.shields.io/github/issues/sdougbrown/react-flyd-component.svg)](https://github.com/sdougbrown/react-flyd-component/issues)
+[![Dependencies](https://img.shields.io/david/sdougbrown/react-flyd-component.svg?style=flat)](https://david-dm.org/sdougbrown/react-flyd-component)
+
 Live-Updating, "Stateless" [React](http://facebook.github.io/react/) Components Using [flyd](https://github.com/paldepind/flyd)
 
 #### 👏 TMTOWTDI

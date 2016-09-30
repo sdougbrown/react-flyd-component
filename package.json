@@ -6,10 +6,22 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sdougbrown/react-flyd-component"
+  },
   "keywords": [
     "flyd",
     "react"
   ],
   "author": "Doug Brown <npm@douggo.com> (http://douggo.com)",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sdougbrown/react-flyd-component/issues"
+  },
+  "homepage": "https://github.com/sdougbrown/react-flyd-component#readme",
+  "peerDependencies": {
+    "react": ">=0.13.x <16.0.0",
+    "flyd": ">=0.1.x <=0.2.x"
+  }
 }
