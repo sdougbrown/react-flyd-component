@@ -105,7 +105,9 @@ export class StreamingComponent extends Component {
       throw new Error('Must call setStreams with an Array of streams');
     }
     this.clearUpdater();
-    streams.filter(isStream).forEach(this._streams.push);
+    streams.filter(isStream).forEach((stream) => {
+      this._streams.push(stream);
+    });
     this.trackUpdates();
   }
 
