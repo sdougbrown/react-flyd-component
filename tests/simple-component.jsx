@@ -3,7 +3,7 @@ import o from 'ospec';
 import render from './render';
 
 import { stream, on } from 'flyd';
-import Flyd from '../';
+import Flyd from '../src/';
 
 const SimpleComponent = Flyd((props) => {
   return (<div>{props.stream && props.stream()},{props.text}</div>);

@@ -3,7 +3,7 @@ import o from 'ospec';
 import render from './render';
 
 import { stream } from 'flyd';
-import { StreamingComponent } from '../';
+import { StreamingComponent } from '../src/';
 
 export default (o.spec('Advanced Flyd Component', () => {
   o.spec('Set Streams Method', () => {
