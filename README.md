@@ -1,6 +1,6 @@
 # React Flyd Component
 
-[![Build Status](https://travis-ci.org/sdougbrown/react-flyd-component.svg?branch=master)](https://travis-ci.org/sdougbrown/react-flyd-component)
+[![Build Status](https://travis-ci.org/sdougbrown/react-flyd-component.svg)](https://travis-ci.org/sdougbrown/react-flyd-component)
 [![GitHub issues](https://img.shields.io/github/issues/sdougbrown/react-flyd-component.svg)](https://github.com/sdougbrown/react-flyd-component/issues)
 [![Dependencies](https://img.shields.io/david/sdougbrown/react-flyd-component.svg?style=flat)](https://david-dm.org/sdougbrown/react-flyd-component)
 
