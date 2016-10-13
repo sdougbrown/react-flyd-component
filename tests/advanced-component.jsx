@@ -6,6 +6,58 @@ import { stream } from 'flyd';
 import { StreamingComponent } from '../src/';
 
 export default (o.spec('Advanced Flyd Component', () => {
+  o.spec('Add Streams Method', () => {
+    var onClear, onTrack;
+
+    class AddSpy extends StreamingComponent {
+      constructor(props) {
+        super(props);
+      }
+
+      render() {
+        return (<div>{'hi'}</div>);
+      }
+    }
+
+    o.beforeEach(() => {
+      AddSpy.prototype.clearUpdater = onClear = o.spy();
+      AddSpy.prototype.trackUpdates = onTrack = o.spy();
+    });
+
+    o('does not change anything when given invalid args', () => {
+      const node = render(AddSpy);
+      const instance = node.instance();
+
+      let err = null;
+
+      try {
+        instance.addStreams(null);
+      } catch (e) {
+        err = e;
+      }
+
+      o(err).notEquals(null);
+      o(onClear.callCount).equals(0);
+      o(onTrack.callCount).equals(1); // run on mount
+    });
+
+    o('adds to stream pool', () => {
+      const node = render(AddSpy, {
+        one: stream(), two: stream(), three: stream()
+      });
+      const instance = node.instance();
+
+      o(instance._streams.length).equals(3);
+
+      instance.addStreams([stream()]);
+
+      o(instance._streams.length).equals(4);
+
+      o(onClear.callCount).equals(0);
+      o(onTrack.callCount).equals(2);
+    });
+  });
+
   o.spec('Set Streams Method', () => {
     var onClear, onTrack;
 
@@ -41,7 +93,7 @@ export default (o.spec('Advanced Flyd Component', () => {
       o(onTrack.callCount).equals(1); // run on mount
     });
 
-    o('adds to stream pool', () => {
+    o('replaces stream pool', () => {
       const node = render(SetSpy, {
         one: stream(), two: stream(), three: stream()
       });
@@ -51,9 +103,9 @@ export default (o.spec('Advanced Flyd Component', () => {
 
       instance.setStreams([stream()]);
 
-      o(instance._streams.length).equals(4);
+      o(instance._streams.length).equals(1);
 
-      o(onClear.callCount).equals(1);
+      o(onClear.callCount).equals(0);
       o(onTrack.callCount).equals(2);
     });
   });
@@ -86,25 +138,69 @@ export default (o.spec('Advanced Flyd Component', () => {
       instance.clearStreams();
       o(instance._streams.length).equals(0);
     });
+  });
 
-    o('clear streams with no args', () => {
-      const node = render(ClearSpy);
-      const instance = node.instance();
+  o.spec('Track Updates Method', () => {
+    var onClear, onUpdate;
 
-      instance.clearStreams();
+    class TrackSpy extends StreamingComponent {
+      constructor(props) {
+        super(props);
+      }
 
-      o(onSet.callCount).equals(0);
+      render() {
+        return (<div>{'hi'}</div>);
+      }
+    }
+
+    o.beforeEach(() => {
+      TrackSpy.prototype.clearUpdater = onClear = o.spy();
+      TrackSpy.prototype.onStreamUpdate = onUpdate = o.spy();
     });
 
-    o('clear streams with an argument', () => {
-      const node = render(ClearSpy);
+    o('actually mounts something that works', () => {
+      const test = stream();
+
+      const node = render(TrackSpy, { test });
       const instance = node.instance();
-      const arg = [1,2,3];
 
-      instance.clearStreams(arg);
+      o(onUpdate.callCount).equals(0);
 
-      o(onSet.callCount).equals(1);
-      o(onSet.args[0]).equals(arg);
+      test(true);
+
+      o(onUpdate.callCount).equals(1);
+    });
+
+    o('clears previous updaters on init', () => {
+      const node = render(TrackSpy, { one: stream() });
+      const instance = node.instance();
+
+      o(instance._isMounted).equals(true);
+      o(instance._updater).notEquals(null);
+      o(onClear.callCount).equals(1);
+      o(onUpdate.callCount).equals(0);
+    });
+
+    o('does not initialize with no streams', () => {
+      const node = render(TrackSpy);
+      const instance = node.instance();
+
+      o(instance._updater).equals(null);
+      o(onClear.callCount).equals(1);
+      o(onUpdate.callCount).equals(0);
+    });
+
+    o('will not re-init if unmounted', () => {
+      const node = render(TrackSpy, { one: stream() });
+      const instance = node.instance();
+
+      o(instance._isMounted).equals(true);
+      o(instance._updater).notEquals(null);
+
+      instance._isMounted = false;
+      instance.setStreams([stream(), stream()]);
+
+      o(instance._updater).equals(null);
     });
   });
 }));
