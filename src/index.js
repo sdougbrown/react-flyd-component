@@ -21,6 +21,7 @@ export class StreamingComponent extends Component {
   constructor(props) {
     super(props);
 
+    this._isMounted = false;
     this._updater = null;
     this._streams = getStreamsFromProps(props);
     this._onUpdate = combine(this.onStreamUpdate.bind(this));
@@ -61,6 +62,7 @@ export class StreamingComponent extends Component {
    * @returns {void}
    */
   componentWillMount() {
+    this._isMounted = true;
     this.trackUpdates();
   }
 
@@ -74,6 +76,7 @@ export class StreamingComponent extends Component {
    * @returns {void}
    */
   componentWillUnmount() {
+    this._isMounted = false;
     this.clearUpdater();
   }
 
@@ -87,47 +90,60 @@ export class StreamingComponent extends Component {
   trackUpdates() {
     this.clearUpdater();
 
-    this._updater = (this._streams.length)
+    this._updater = (this._isMounted && this._streams.length)
       ? this._onUpdate(this._streams)
       : null;
   }
 
   /**
-   * setStreams
+   * addStreams
    *
    * Adds new streams to the updater
    *
    * @param {Array} streams - streams to add
    * @returns {void}
    */
+  addStreams(streams) {
+    if (!Array.isArray(streams)) {
+      throw new Error('Must call addStreams with an Array of streams');
+    }
+
+    streams.filter(isStream).forEach((stream) => {
+      this._streams.push(stream);
+    });
+
+    this.trackUpdates();
+  }
+
+  /**
+   * setStreams
+   *
+   * Replaces the streams watched by the updater
+   *
+   * @param {Array} streams - streams to set
+   * @returns {void}
+   */
   setStreams(streams) {
     if (!Array.isArray(streams)) {
       throw new Error('Must call setStreams with an Array of streams');
     }
-    this.clearUpdater();
-    streams.filter(isStream).forEach((stream) => {
-      this._streams.push(stream);
-    });
-    this.trackUpdates();
+
+    // clear streams array before setting
+    this._streams = [];
+    // add streams
+    this.addStreams(streams);
   }
 
   /**
    * clearStreams
    *
    * Stops all live updates and empties the stream pool.
-   * Optionally, accepts a new array of streams and restarts
-   * the update tracker (via setStreams).
    *
-   * @param {Array} [newStreams]
    * @returns {void}
    */
-  clearStreams(newStreams) {
+  clearStreams() {
     this.clearUpdater();
     this._streams = [];
-
-    if (newStreams) {
-      this.setStreams(newStreams);
-    }
   }
 
   /**
