@@ -28,31 +28,6 @@ export class StreamingComponent extends Component {
   }
 
   /**
-   * componentWillReceiveProps
-   *
-   * Handles changes to props for this component
-   * (but only where streams are added or removed).
-   *
-   * Built-in React lifecylce.
-   *
-   * @param {Object} nextProps
-   * @returns {void}
-   */
-  componentWillReceiveProps(nextProps) {
-    const newStreams = getStreamsFromProps(nextProps);
-
-    // it doesn't make much sense that streams would
-    // be conditionally present, but hey who am I to judge.
-    // this will clearly not automatically update if two streams
-    // are swapped-out (length is equal but streams are different).
-    // that's what `clearStreams` is for, so it should be
-    // invoked manually if you try that junk. *wontfix*
-    if (newStreams.length !== this._streams.length) {
-      this.clearStreams(newStreams);
-    }
-  }
-
-  /**
    * componentWillMount
    *
    * Begins watching the streams attached streams for updates.
