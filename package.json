@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/sdougbrown/react-flyd-component#readme",
   "peerDependencies": {
-    "react": ">=0.13.x <16.0.0",
-    "flyd": ">=0.1.x <=0.2.x"
+    "flyd": ">=0.1.x <=0.2.x",
+    "react": ">=0.13.x <16.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.16.0",

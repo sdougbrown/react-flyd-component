@@ -47,11 +47,11 @@ export default (o.spec('Advanced Flyd Component', () => {
       });
       const instance = node.instance();
 
-      o(instance._streams.length).equals(3);
+      o(instance.__streams.length).equals(3);
 
       instance.addStreams([stream()]);
 
-      o(instance._streams.length).equals(4);
+      o(instance.__streams.length).equals(4);
 
       o(onClear.callCount).equals(0);
       o(onTrack.callCount).equals(2);
@@ -99,11 +99,11 @@ export default (o.spec('Advanced Flyd Component', () => {
       });
       const instance = node.instance();
 
-      o(instance._streams.length).equals(3);
+      o(instance.__streams.length).equals(3);
 
       instance.setStreams([stream()]);
 
-      o(instance._streams.length).equals(1);
+      o(instance.__streams.length).equals(1);
 
       o(onClear.callCount).equals(0);
       o(onTrack.callCount).equals(2);
@@ -133,10 +133,10 @@ export default (o.spec('Advanced Flyd Component', () => {
       });
       const instance = node.instance();
 
-      o(instance._updater).notEquals(null);
-      o(instance._streams.length).equals(3);
+      o(instance.__updater).notEquals(null);
+      o(instance.__streams.length).equals(3);
       instance.clearStreams();
-      o(instance._streams.length).equals(0);
+      o(instance.__streams.length).equals(0);
     });
   });
 
@@ -175,8 +175,8 @@ export default (o.spec('Advanced Flyd Component', () => {
       const node = render(TrackSpy, { one: stream() });
       const instance = node.instance();
 
-      o(instance._isMounted).equals(true);
-      o(instance._updater).notEquals(null);
+      o(instance.__isMounted).equals(true);
+      o(instance.__updater).notEquals(null);
       o(onClear.callCount).equals(1);
       o(onUpdate.callCount).equals(0);
     });
@@ -185,7 +185,7 @@ export default (o.spec('Advanced Flyd Component', () => {
       const node = render(TrackSpy);
       const instance = node.instance();
 
-      o(instance._updater).equals(null);
+      o(instance.__updater).equals(null);
       o(onClear.callCount).equals(1);
       o(onUpdate.callCount).equals(0);
     });
@@ -194,13 +194,13 @@ export default (o.spec('Advanced Flyd Component', () => {
       const node = render(TrackSpy, { one: stream() });
       const instance = node.instance();
 
-      o(instance._isMounted).equals(true);
-      o(instance._updater).notEquals(null);
+      o(instance.__isMounted).equals(true);
+      o(instance.__updater).notEquals(null);
 
-      instance._isMounted = false;
+      instance.__isMounted = false;
       instance.setStreams([stream(), stream()]);
 
-      o(instance._updater).equals(null);
+      o(instance.__updater).equals(null);
     });
   });
 }));

@@ -21,14 +21,14 @@ export class StreamingComponent extends Component {
   constructor(props) {
     super(props);
 
-    this._isMounted = false;
-    this._updater = null;
-    this._streams = getStreamsFromProps(props);
-    this._onUpdate = combine(this.onStreamUpdate.bind(this));
+    this.__isMounted = false;
+    this.__updater = null;
+    this.__streams = getStreamsFromProps(props);
+    this.__onUpdate = combine(this.onStreamUpdate.bind(this));
   }
 
   /**
-   * componentWillMount
+   * componentDidMount
    *
    * Begins watching the streams attached streams for updates.
    *
@@ -36,8 +36,8 @@ export class StreamingComponent extends Component {
    *
    * @returns {void}
    */
-  componentWillMount() {
-    this._isMounted = true;
+  componentDidMount() {
+    this.__isMounted = true;
     this.trackUpdates();
   }
 
@@ -51,7 +51,7 @@ export class StreamingComponent extends Component {
    * @returns {void}
    */
   componentWillUnmount() {
-    this._isMounted = false;
+    this.__isMounted = false;
     this.clearUpdater();
   }
 
@@ -65,8 +65,8 @@ export class StreamingComponent extends Component {
   trackUpdates() {
     this.clearUpdater();
 
-    this._updater = (this._isMounted && this._streams.length)
-      ? this._onUpdate(this._streams)
+    this.__updater = (this.__isMounted && this.__streams.length)
+      ? this.__onUpdate(this.__streams)
       : null;
   }
 
@@ -84,7 +84,7 @@ export class StreamingComponent extends Component {
     }
 
     streams.filter(isStream).forEach((stream) => {
-      this._streams.push(stream);
+      this.__streams.push(stream);
     });
 
     this.trackUpdates();
@@ -104,7 +104,7 @@ export class StreamingComponent extends Component {
     }
 
     // clear streams array before setting
-    this._streams = [];
+    this.__streams = [];
     // add streams
     this.addStreams(streams);
   }
@@ -118,7 +118,7 @@ export class StreamingComponent extends Component {
    */
   clearStreams() {
     this.clearUpdater();
-    this._streams = [];
+    this.__streams = [];
   }
 
   /**
@@ -129,8 +129,8 @@ export class StreamingComponent extends Component {
    * @returns {void}
    */
   clearUpdater() {
-    if (this._updater) {
-      this._updater.end(true);
+    if (this.__updater) {
+      this.__updater.end(true);
     }
   }
 
@@ -142,9 +142,9 @@ export class StreamingComponent extends Component {
    * @returns {void}
    */
   onStreamUpdate() {
-    // refresh when the updater is available
-    // (i.e. the component is mounted)
-    if (this.updater) {
+    // refresh when mounted
+    // (using internal boolean for compat with preact/inferno)
+    if (this.__isMounted) {
       this.forceUpdate();
     }
   }
