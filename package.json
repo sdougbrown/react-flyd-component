@@ -1,6 +1,6 @@
 {
   "name": "react-flyd-component",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Live-Updating Stateless React Components Using Flyd",
   "main": "lib/index.js",
   "scripts": {
