@@ -21,6 +21,7 @@ export class StreamingComponent extends Component {
   constructor(props) {
     super(props);
 
+    this.__isMounting = false;
     this.__isMounted = false;
     this.__updater = null;
     this.__streams = getStreamsFromProps(props);
@@ -28,7 +29,7 @@ export class StreamingComponent extends Component {
   }
 
   /**
-   * componentDidMount
+   * componentWillMount
    *
    * Begins watching the streams attached streams for updates.
    *
@@ -36,9 +37,13 @@ export class StreamingComponent extends Component {
    *
    * @returns {void}
    */
+  componentWillMount() {
+    this.__isMounting = true;
+    this.trackUpdates();
+  }
+
   componentDidMount() {
     this.__isMounted = true;
-    this.trackUpdates();
   }
 
   /**
@@ -51,6 +56,7 @@ export class StreamingComponent extends Component {
    * @returns {void}
    */
   componentWillUnmount() {
+    this.__isMounting = false;
     this.__isMounted = false;
     this.clearUpdater();
   }
@@ -65,7 +71,7 @@ export class StreamingComponent extends Component {
   trackUpdates() {
     this.clearUpdater();
 
-    this.__updater = (this.__isMounted && this.__streams.length)
+    this.__updater = (this.__isMounting && this.__streams.length)
       ? this.__onUpdate(this.__streams)
       : null;
   }
