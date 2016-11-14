@@ -96,3 +96,7 @@ class InsaneComponent extends StreamingComponent {
 }
 // render/export
 ```
+
+Advanced Usage Note:
+
+This HOC hooks into both the `componentWillMount`, `componentDidMount`, and `componentWillUnmount` lifecycles, so if you choose to use those lifecycles as well you should call the `super` of those methods (e.g. `super.componentWillMount()`)  at runtime as well.
